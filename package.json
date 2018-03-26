@@ -3,8 +3,8 @@
     "version": "0.0.2",
     "private": false,
     "scripts": {
-        "build": "cross-env NODE_ENV=production webpack --progress --hide-modules --config src/build/webpack-config-build.js",
-        "dev": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --config src/build/webpack-config-dev.js",
+        "build": "webpack --progress --hide-modules --config src/build/webpack-config-build.js",
+        "dev": "webpack-dev-server --inline --hot --config src/build/webpack-config-dev.js",
         "test": "karma start --single-run",
         "test-dev": "karma start"
     },
@@ -29,6 +29,7 @@
         "ts-loader": "^4.1.0",
         "typescript": "^2.6.1",
         "webpack": "~4.2.0",
+        "webpack-cli": "^2.0.13",
         "webpack-merge": "^4.1.0"
     },
     "engines": {
