@@ -1,11 +1,11 @@
-# asvae-executors
+# asva-executors
 
 Helper classes for your async flow control.
 
 ## Install
 
-* **npm**: `npm install asvae-executors` 
-* **yarn**: `yarn add asvae-executors`
+* **npm**: `npm install asva-executors` 
+* **yarn**: `yarn add asva-executors`
 
 ## Issues
 

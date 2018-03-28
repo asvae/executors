@@ -1,6 +1,8 @@
 {
-    "name": "asvae-executors",
-    "version": "0.0.2",
+    "name": "asva-executors",
+    "version": "0.0.3",
+    "description": "Helper classes for your async flow control",
+    "main": "index.js",
     "private": false,
     "scripts": {
         "build": "webpack --progress --hide-modules --config src/build/webpack-config-build.js",
