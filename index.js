@@ -1,4 +1,4 @@
-export executors from './build/index'
+import executors from './build/index'
 
 export const CacheExecutor = executors.CacheExecutor
 export const Executor = executors.Executor
