@@ -1,10 +1,9 @@
 {
     "name": "asva-executors",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "Helper classes for your async flow control",
     "main": "build/index.js",
     "types": "build/declarations/index.d.ts",
-    "main": "index.js",
     "private": false,
     "license": "MIT",
     "author": "Yauheni Prakopchyk",
