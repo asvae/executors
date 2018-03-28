@@ -5,7 +5,7 @@ module.exports = function () {
   return {
     mode: 'development',
     entry: {
-      app: config.FOLDERS.SRC + '/build/index.js',
+      app: config.FOLDERS.SRC + '/index.ts',
     },
     stats: {
       colors: true,
