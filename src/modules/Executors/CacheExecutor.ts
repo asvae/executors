@@ -5,19 +5,19 @@ import Executor from './Executor'
  */
 export default class CacheExecutor extends Executor {
   
-  cachedPromise: Promise<any> = null
+  cachedPromise: Promise<any> | null = null
 
   /**
    * @public
    */
-  run (...parameters): Promise<any> {
+  run (...parameters: any[]): Promise<any> {
     if (!this.cachedPromise) {
       this.cachedPromise = super.run(...parameters)
     }
     return this.cachedPromise
   }
 
-  runFresh (...parameters): Promise<any> {
+  runFresh (...parameters: any[]): Promise<any> {
     this.cachedPromise = super.run(...parameters)
     return this.cachedPromise
   }

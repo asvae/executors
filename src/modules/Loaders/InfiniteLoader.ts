@@ -1,6 +1,6 @@
 import LadderExecutor from '../Executors/LadderExecutor'
 
-type PointerRequest = (pointer: number, perStep: number) => Promise<any[]>
+export type PointerRequest = (pointer: number, perStep: number) => Promise<any[]>
 
 export default class InfiniteLoader {
   items: any[] = []

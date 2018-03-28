@@ -13,7 +13,7 @@ export default class LadderExecutor extends Executor {
   /**
    * @public
    */
-  run (...parameters): Promise<any>  {
+  run (...parameters: any[]): Promise<any>  {
     if (!this.isRunning) {
       const promise = super.run(...parameters)
       promise.then(() => {

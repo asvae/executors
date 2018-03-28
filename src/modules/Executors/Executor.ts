@@ -38,7 +38,7 @@ export default class Executor {
   /**
    * @public
    */
-  run (...parameters): Promise<any>  {
+  run (...parameters: any[]): Promise<any>  {
     this.beforeRun()
     const promise = this.command(...parameters)
     if (!(promise instanceof Promise)) {
