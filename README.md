@@ -25,17 +25,17 @@ Library is armed with TypeScript declarations and tests.
 
 Available classes are:
 
-* Executor - basic executor (is extended by all other executors).
-* CacheExecutor - caches first result.
-* LadderExecutor - runs subsequent request only after previous one is finished.
-* RepeatExecutor - is just `setInterval` wrapped in class.
+* **Executor** - basic executor (is extended by all other executors).
+* **CacheExecutor** - caches first result.
+* **LadderExecutor** - runs subsequent request only after previous one is finished.
+* **RepeatExecutor** - is just `setInterval` wrapped in class.
 
 Here are some possible use cases:
 
-* Executor - loaders (spinners), passing control through nested component structure.
-* CacheExecutor - one time requests (languages, configs, currencies), deep nested data aggregation with asynchronous loading.
-* LadderExecutor - live search.
-* RepeatExecutor - timed operations, websocket simulation and other hacks : 3.
+* **Executor** - loaders (spinners), passing control through nested component structure.
+* **CacheExecutor** - one time requests (languages, configs, currencies), deep nested data aggregation with asynchronous loading.
+* **LadderExecutor** - live search.
+* **RepeatExecutor** - timed operations, websocket simulation and other hacks : 3.
 
 ## Code and examples
 
@@ -46,10 +46,13 @@ import { Executor } from 'asva-executors'
 
 // This command is just example. Yours should still return promise but hopefully be more useful : 3.
 const command = response => Promise.resolve(response)
+
 // Instantiate executor
 const executor = new Executor(command)
+
 // Run command and process results
 executor.run('data').then(result => console.log(result)) // Outputs 'data' to console
+
 // Do some checks
 executor.isRunning // Tells if executor currently runs command.
 executor.runCount  // Show the number of currently running commands. There could be more than one, yes.
@@ -62,22 +65,26 @@ executor.wasLastRunFine // Last executor run happened without an error
 ### CacheExecutor
 
 ```javascript
+// We intend to make an expensive ajax call from several places.
 import { CacheExecutor } from 'asva-executors'
 const executor = new Executor(ajaxExpensiveCall)
+
 // Run the same executor in a number of places simultaneously or not. 
 // Command will be executed only once.
 const result = await executor.run()
 
-// If you have to load anew
+// If you have to load anew.
 executor.runFresh()
 ``` 
 
 ### LadderExecutor
 
 ```javascript
+// We develop a live search.
 import { LadderExecutor } from 'asva-executors'
 const executor = new Executor(liveSearchCall)
-// Let's imagine we develop a live search and trying to work around the case when user takes a nap on his keyboard.
+
+// Here's the case when user takes a nap on his keyboard.
 executor.run('a') // This request will be run
 executor.run('aa') // This request won't be run
 executor.run('aaa') // This request won't be run
@@ -91,8 +98,12 @@ executor.run('aaaa') // This request will be run only after first one resolves.
 // Being too lazy to implement websockets we decide to check notifications every ten seconds.
 import { RepeatExecutor } from 'asva-executors'
 const executor = new RepeatExecutor(checkNotificationsCall, 10000)
-executor.start() // Start checking notifications
-executor.stop() // Stop checking notifications
+
+// Start checking notifications
+executor.start()
+
+// Stop checking notifications
+executor.stop()
 ``` 
 
 You have to stop `RepeatExecutor` to disable it. Similar to `setInterval` command it won't be garbage collected until then.
