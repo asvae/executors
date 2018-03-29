@@ -3,7 +3,7 @@ import Executor from './modules/Executors/Executor'
 import LadderExecutor from './modules/Executors/LadderExecutor'
 import RepeatExecutor from './modules/Executors/RepeatExecutor'
 
-export default {
+export {
   CacheExecutor,
   Executor,
   LadderExecutor,
