@@ -1,28 +1,33 @@
 import Executor from './Executor'
 
 /**
- * This executor caches first result
+ * This executor caches first run result and provides it for all subsequent calls.
  */
 export default class CacheExecutor extends Executor {
-  
-  cachedPromise: Promise<any> | null = null
+  protected cachedPromise: Promise<any> | null = null
 
   /**
-   * @public
+   * Run command and cache promise.
    */
-  run (...parameters: any[]): Promise<any> {
+  public run (...parameters: any[]): Promise<any> {
     if (!this.cachedPromise) {
       this.cachedPromise = super.run(...parameters)
     }
     return this.cachedPromise
   }
 
-  runFresh (...parameters: any[]): Promise<any> {
+  /**
+   * Run executor without cache. Promise will be put to cache though.
+   */
+  public runFresh (...parameters: any[]): Promise<any> {
     this.cachedPromise = super.run(...parameters)
     return this.cachedPromise
   }
 
-  cleanCache () {
+  /**
+   * Just clean cache.
+   */
+  public cleanCache () {
     this.cachedPromise = null
   }
 }

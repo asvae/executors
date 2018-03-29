@@ -1,45 +1,49 @@
+export type ExecutorCommand = (...args: any[]) => Promise<any>
+
 export default class Executor {
-  protected command: Function
+  protected command: ExecutorCommand
 
-  wasLastRunFine: boolean = false //
-  runCount: number = 0 // Currently active commands count
-  wasRun: boolean = false // Executor was run at least once
-  wasRunFine: boolean = false // Executor was without throwing error at least once
-  wasRunBad: boolean = false //
+  /**
+   * Currently running commands
+   */
+  public runCount: number = 0 //
 
-  constructor (command: (...args: any[]) => Promise<any>) {
+  /**
+   * Last executor run happened without an error
+   */
+  public wasLastRunFine: boolean = false //
+
+  /**
+   * Executor was run at least once
+   */
+  public wasRun: boolean = false
+
+  /**
+   * Executor was run without throwing error at least once
+   */
+  public wasRunFine: boolean = false
+
+  /**
+   * Executor was run with thrown error at least once
+   */
+  public wasRunBad: boolean = false
+
+  constructor (command: ExecutorCommand) {
     this.command = command
   }
 
-  get isRunning (): boolean {
+  /**
+   * Command from this executor is currently running.
+   */
+  public get isRunning (): boolean {
     return !!this.runCount
   }
 
   /**
-   * @protected
+   * @param parameters Arguments, will be passed down to command.
+   * @returns {Promise<any>} Promise result is formed from whatever you returned from command.
    */
-  beforeRun (): void {
-    this.runCount++
-  }
-
-  /**
-   * @protected
-   */
-  afterRun (promise: Promise<any>): void {
-    promise.then(() => {
-      this.runCount--
-      this.setRunResultFlags(true)
-    })
-    promise.catch((result) => {
-      this.runCount--
-      this.setRunResultFlags(false)
-    })
-  }
-
-  /**
-   * @public
-   */
-  run (...parameters: any[]): Promise<any> {
+  public run (...parameters: any[]): Promise<any> {
     this.beforeRun()
     const promise = this.command(...parameters)
     if (!(promise instanceof Promise)) {
@@ -49,10 +53,22 @@ export default class Executor {
     return promise
   }
 
-  /**
-   * @protected
-   */
-  setRunResultFlags (success: boolean) {
+  protected beforeRun (): void {
+    this.runCount++
+  }
+
+  protected afterRun (promise: Promise<any>): void {
+    promise.then(() => {
+      this.runCount--
+      this.setRunResultFlags(true)
+    })
+    promise.catch(() => {
+      this.runCount--
+      this.setRunResultFlags(false)
+    })
+  }
+
+  protected setRunResultFlags (success: boolean): void {
     this.wasRun = true
     this.wasLastRunFine = success
     if (success) {

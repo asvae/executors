@@ -1,5 +1,6 @@
 const config = require('./config.js')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+const TypedocWebpackPlugin = require('typedoc-webpack-plugin')
 
 module.exports = function () {
   return {
@@ -34,6 +35,9 @@ module.exports = function () {
     },
     plugins: [
       new CleanWebpackPlugin(['dist'], { root: config.FOLDERS.ROOT }),
+      new TypedocWebpackPlugin({
+        target: 'es2017',
+      }),
     ],
   }
 }
