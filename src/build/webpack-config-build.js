@@ -20,8 +20,8 @@ module.exports = function () {
       hints: false,
     },
     output: {
-      path: config.FOLDERS.BUILD,
-      filename: 'index.js',
+      path: config.FOLDERS.DIST,
+      filename: 'src/index.js',
       publicPath: '/',
     },
     module: {
@@ -33,7 +33,7 @@ module.exports = function () {
       ],
     },
     plugins: [
-      new CleanWebpackPlugin(['build'], { root: config.FOLDERS.ROOT }),
+      new CleanWebpackPlugin(['dist'], { root: config.FOLDERS.ROOT }),
     ],
   }
 }
