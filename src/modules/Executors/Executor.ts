@@ -1,12 +1,13 @@
 export default class Executor {
-  command: Function
-  wasLastRunFine: boolean = false
-  runCount: number = 0 // Currently active commands count
-  wasRun: boolean = false
-  wasRunFine: boolean = false
-  wasRunBad: boolean = false
+  protected command: Function
 
-  constructor (command: (...args: any[]) => Promise<any> ) {
+  wasLastRunFine: boolean = false //
+  runCount: number = 0 // Currently active commands count
+  wasRun: boolean = false // Executor was run at least once
+  wasRunFine: boolean = false // Executor was without throwing error at least once
+  wasRunBad: boolean = false //
+
+  constructor (command: (...args: any[]) => Promise<any>) {
     this.command = command
   }
 
@@ -24,7 +25,7 @@ export default class Executor {
   /**
    * @protected
    */
-  afterRun (promise: Promise<any> ): void {
+  afterRun (promise: Promise<any>): void {
     promise.then(() => {
       this.runCount--
       this.setRunResultFlags(true)
@@ -38,7 +39,7 @@ export default class Executor {
   /**
    * @public
    */
-  run (...parameters: any[]): Promise<any>  {
+  run (...parameters: any[]): Promise<any> {
     this.beforeRun()
     const promise = this.command(...parameters)
     if (!(promise instanceof Promise)) {
