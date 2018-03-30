@@ -9,13 +9,13 @@ Helper classes for your async flow control.
 
 ## Intent
 
-Conceptually, executors are just wrappers for asynchronous commands (functions). Wrappers that possess the following sensible benefits:
+Conceptually, executors are just wrappers for asynchronous commands (functions). Yet they possess the following benefits:
 
 * They encapsulate the command, allowing it to be safely passed around without exposing its internals.
 * Provide utility methods for state monitoring. For instance, `executor.isRunning` tells whether executor runs command or not. Vanilla JS solutions often involve flags and are much clunkier.
 * Enforce specific logic for command execution. You can cache results, limit concurrent runs or even encapsulate into executor the logic for your lazy loaded list.
 
-Executors are low-level concept, so they might require a bit of time to wrap the head around. After that they're intuitive and fun to use.
+Executors are low-level concept, so they might require a bit of time to wrap your head around. After that they're intuitive and fun to use.
 
 This library was not born on the spot and classes were used in various applications big and small by multiple developers for more than a year. Expect it to be reasonably refined and well thought.
 
@@ -33,7 +33,7 @@ Available classes are:
 Here are some possible use cases:
 
 * **Executor** - loaders (spinners), passing control through nested component structure.
-* **CacheExecutor** - one time requests (languages, configs, currencies), deep nested data aggregation with asynchronous loading.
+* **CacheExecutor** - one time requests (languages, configs, currencies), deep nested data aggregation.
 * **LadderExecutor** - live search.
 * **RepeatExecutor** - timed operations, websocket simulation and other hacks : 3.
 
