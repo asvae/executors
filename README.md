@@ -15,7 +15,7 @@ Conceptually, executors are just wrappers for asynchronous commands (functions).
 * Provide utility methods for state monitoring. For instance, `executor.isRunning` tells whether executor runs command or not. Vanilla JS solutions often involve flags and are much clunkier.
 * Enforce specific logic for command execution. You can cache results, limit concurrent runs or even encapsulate into executor the logic for your lazy loaded list.
 
-Executors are low-level concept, so they might require a bit of time to wrap your head around. After that they're intuitive and fun to use.
+Executors are low-level concept and might require a bit of time to wrap your head around. After that they're intuitive and fun to use.
 
 This library was not born on the spot and classes were used in various applications big and small by multiple developers for more than a year. Expect it to be reasonably refined and well thought.
 
@@ -29,6 +29,7 @@ Available classes are:
 * **CacheExecutor** - caches first result.
 * **LadderExecutor** - runs subsequent request only after previous one is finished.
 * **RepeatExecutor** - is just `setInterval` wrapped in class.
+* **InfiniteLoader** - encapsulates lazy loaded list logic.
 
 Here are some possible use cases:
 
@@ -36,6 +37,7 @@ Here are some possible use cases:
 * **CacheExecutor** - one time requests (languages, configs, currencies), deep nested data aggregation.
 * **LadderExecutor** - live search.
 * **RepeatExecutor** - timed operations, websocket simulation and other hacks : 3.
+* **InfiniteLoader** - lazy loaded list.
 
 ## Code and examples
 
@@ -107,6 +109,42 @@ executor.stop()
 ``` 
 
 You have to stop `RepeatExecutor` if you don't need it anymore. Similar to `setInterval` command it won't be garbage collected until then.
+
+### InfiniteLoader
+
+```javascript
+// This example is lazy loaded list of items.
+import { InfiniteLoader } from 'asva-executors'
+
+/**
+* Constructor takes in two arguments:
+* 
+* * command, which is a function that takes in 
+*   - `pointer` (position in list, OFFSET in sql),
+*   - `perStep` (number of items per request, LIMIT in sql);
+*   and returns promise with a specified number of items.
+*   If length of items loaded is less than `perStep`, loader
+*   would consider itself finished and won't trigger anymore. 
+*   
+* * perStep - number of items per request (defaults to 20)
+*/
+const infiniteLoader = new InfiniteLoader(
+  async (pointer, perStep) =>  await loadListItems(pointer, perStep), 
+  10
+)
+infiniteLoader.next() // Initial run. Let's load 10 items.
+infiniteLoader.next() // User scrolls to bottom.
+infiniteLoader.refresh() // User applies filter. List will be refreshed.
+
+// To get items call
+infiniteLoader.items
+
+// You can perform various checks on `infiniteLoader`:
+infiniteLoader.isRunning // Loader is running
+infiniteLoader.isEmpty // We tried to load, but list is empty
+infiniteLoader.ifFull // We tried to load, and list is not empty
+infiniteLoader.isRefreshing // Is loading anew (refreshing or loading for first time).
+```
 
 -----------------------
 
