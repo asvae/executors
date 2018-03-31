@@ -24,6 +24,7 @@ module.exports = function () {
       path: config.FOLDERS.DIST,
       filename: 'src/index.js',
       publicPath: '/',
+      libraryTarget: 'umd',
     },
     module: {
       rules: [

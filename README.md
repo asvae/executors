@@ -80,11 +80,11 @@ executor.runFresh()
 ### LadderExecutor
 
 ```javascript
-// We develop a live search.
+// This example is live search.
 import { LadderExecutor } from 'asva-executors'
 const executor = new Executor(liveSearchCall)
 
-// Here's the case when user takes a nap on his keyboard.
+// Imagine the case when user takes a nap on his keyboard.
 executor.run('a') // This request will be run
 executor.run('aa') // This request won't be run
 executor.run('aaa') // This request won't be run
@@ -106,7 +106,7 @@ executor.start()
 executor.stop()
 ``` 
 
-You have to stop `RepeatExecutor` to disable it. Similar to `setInterval` command it won't be garbage collected until then.
+You have to stop `RepeatExecutor` if you don't need it anymore. Similar to `setInterval` command it won't be garbage collected until then.
 
 -----------------------
 
