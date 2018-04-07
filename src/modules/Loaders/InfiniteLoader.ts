@@ -8,14 +8,13 @@ export default class InfiniteLoader {
   protected pointer: number = 0
   protected executor: LadderExecutor
   protected perStep: number = 20 // number of items to load
-  protected isFinished: Boolean = false
-  protected isFresh: Boolean = true
+  protected isFinished: boolean = false
+  protected isFresh: boolean = true
 
   constructor (run: PointerRequest, perStep: number = 20) {
     this.executor = new LadderExecutor(run)
     this.perStep = perStep
   }
-
 
   /**
    * Command from this executor is currently running.
@@ -58,27 +57,37 @@ export default class InfiniteLoader {
       return this.items
     }
     this.isFresh = false
+
     return this.runExecutor()
   }
 
   protected async runExecutor (): Promise<any[]> {
-    const pointer = this.pointer
-    await this.executor.run(pointer, this.perStep).then((result: any[]) => {
+    await this.executor.run(this.pointer, this.perStep).then((result: any[]) => {
+
       if (!Array.isArray(result)) {
+        this.rollbackPointer()
         console.warn('InfiniteLoader function must return array')
         return
       }
       if (result.length < this.perStep) {
         this.isFinished = true
       }
-      this.pointer = pointer + this.perStep
       this.applyNew(result)
     }).catch((exception) => {
+      this.rollbackPointer()
       this.isFinished = true
       throw exception
     })
 
     return this.items
+  }
+
+  protected forwardPointer (): void {
+    this.pointer = this.pointer + this.perStep
+  }
+
+  protected rollbackPointer (): void {
+    this.pointer = this.pointer - this.perStep
   }
 
   /**

@@ -1,4 +1,3 @@
-import ExecutorFactory from './ExecutorFactory'
 import CacheExecutorFactory from './CacheExecutorFactory'
 import CacheExecutor from './CacheExecutor'
 

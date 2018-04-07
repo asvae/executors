@@ -94,6 +94,31 @@ executor.run('aaaa') // This request will be run only after first one resolves.
 // So, in total you have 2 requests instead of 4.
 ``` 
 
+### DebounceExecutor
+
+```javascript
+// We want to save the form if user was inactive for 3 seconds.
+import { DebounceExecutor } from 'asva-executors'
+const executor = new DebounceExecutor(saveTheForm, 3000)
+
+// User starts editing the form
+executor.run()
+// And does that a couple of times in quick succession.
+executor.run()
+executor.run()
+// Then he stops. 3 seconds pass. And only then `saveTheForm` command is called.
+``` 
+
+DebounceExecutor has several public properties:
+```javascript
+executor.isRunning // Means command is currently executing.
+executor.isWaiting // Executor is waiting the period of inactivity to finish.
+executor.isActive // Executor is running or is waiting. 
+```
+
+You have to stop `RepeatExecutor` if you don't need it anymore. Similar to `setInterval` command it won't be garbage collected until then.
+
+
 ### RepeatExecutor
 
 ```javascript
