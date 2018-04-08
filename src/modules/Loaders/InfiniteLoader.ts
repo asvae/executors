@@ -1,18 +1,18 @@
-import LadderExecutor from '../Executors/LadderExecutor'
+import Executor from '../Executors/Executor'
 
 export type PointerRequest = (pointer: number, perStep: number) => Promise<any[]>
 
 export default class InfiniteLoader {
   public items: any[] = []
 
+  protected readonly executor: Executor
+  protected readonly perStep: number = 20 // number of items to load
   protected pointer: number = 0
-  protected executor: LadderExecutor
-  protected perStep: number = 20 // number of items to load
   protected isFinished: boolean = false
   protected isFresh: boolean = true
 
   constructor (run: PointerRequest, perStep: number = 20) {
-    this.executor = new LadderExecutor(run)
+    this.executor = new Executor(run)
     this.perStep = perStep
   }
 
@@ -52,53 +52,43 @@ export default class InfiniteLoader {
   /**
    * Loads a bunch of items
    */
-  public async next (): Promise<any[]> {
-    if (this.isFinished) {
-      return this.items
+  public next (): void {
+    if (this.isRunning) {
+      return
     }
     this.isFresh = false
 
-    return this.runExecutor()
+    this.runExecutor()
   }
 
-  protected async runExecutor (): Promise<any[]> {
-    await this.executor.run(this.pointer, this.perStep).then((result: any[]) => {
+  protected async runExecutor (): Promise<void> {
+    try {
+      const result = await this.executor.run(this.pointer, this.perStep)
 
       if (!Array.isArray(result)) {
-        this.rollbackPointer()
         console.warn('InfiniteLoader function must return array')
         return
       }
       if (result.length < this.perStep) {
         this.isFinished = true
       }
+      this.pointer = this.pointer + this.perStep
       this.applyNew(result)
-    }).catch((exception) => {
-      this.rollbackPointer()
+    } catch (exception) {
       this.isFinished = true
       throw exception
-    })
-
-    return this.items
-  }
-
-  protected forwardPointer (): void {
-    this.pointer = this.pointer + this.perStep
-  }
-
-  protected rollbackPointer (): void {
-    this.pointer = this.pointer - this.perStep
+    }
   }
 
   /**
    * Refresh the list.
    * This will replace current items with new ones after loading. Not clear the list immediately.
    */
-  public async refresh (): Promise<any[]> {
+  public refresh (): void {
     this.pointer = 0
     this.isFresh = true
     this.isFinished = false
-    return await this.runExecutor()
+    this.runExecutor()
   }
 
   protected applyNew (items: any[]): void {

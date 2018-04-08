@@ -9,12 +9,12 @@ function range (start: number, end: number): number[] {
 }
 
 export default class PointerRequestFactory {
-  static getPointerRequest (): PointerRequest {
+  static getPointerRequest (timeout: number = 100): PointerRequest {
     return (pointer: number, perStep: number): Promise<number[]> => {
       return new Promise((resolve) => {
         setTimeout(() => {
           resolve(range(pointer, pointer + perStep))
-        }, 100)
+        }, timeout)
       })
     }
   }

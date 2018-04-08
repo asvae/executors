@@ -1,10 +1,10 @@
-import DebounceExecutor from './DebounceExecutor'
+import DebounceLoader from './DebounceLoader'
 import AsyncHelpers from '../Helpers/AsyncHelpers'
 
-describe('DebounceExecutor', () => {
+describe('DebounceLoader', () => {
   it('offsets command execution time', done => {
     let count = 0
-    const debounceExecutor = new DebounceExecutor(async () => count++, 100)
+    const debounceExecutor = new DebounceLoader(async () => count++, 100)
 
     const asyncExpression = async () => {
       debounceExecutor.run()
@@ -20,7 +20,7 @@ describe('DebounceExecutor', () => {
   })
 
   it('isWaiting', done => {
-    const debounceExecutor = new DebounceExecutor(async () => {}, 100)
+    const debounceExecutor = new DebounceLoader(async () => {}, 100)
 
     const asyncExpression = async () => {
       expect(debounceExecutor.isWaiting).toBe(false)
@@ -34,7 +34,7 @@ describe('DebounceExecutor', () => {
   })
 
   it('isRunning', done => {
-    const debounceExecutor = new DebounceExecutor(
+    const debounceExecutor = new DebounceLoader(
       async () => await AsyncHelpers.sleep(100),
       100,
     )

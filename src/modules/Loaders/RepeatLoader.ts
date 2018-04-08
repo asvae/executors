@@ -2,7 +2,7 @@
  * Runs command on timeout.
  * Don't forget to stop it or executor would run indefinitely.
  */
-export default class RepeatExecutor {
+export default class RepeatLoader {
   command: Function
   time: number = 100
   id: any = null

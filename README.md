@@ -28,16 +28,33 @@ Available classes are:
 * **Executor** - basic executor (is extended by all other executors).
 * **CacheExecutor** - caches first result.
 * **LadderExecutor** - runs subsequent request only after previous one is finished.
-* **RepeatExecutor** - is just `setInterval` wrapped in class.
+* **DebounceLoader** - provides (debounce)[debounce-article] functionality.
+* **RepeatLoader** - is just `setInterval` wrapped in class.
 * **InfiniteLoader** - encapsulates lazy loaded list logic.
 
 Here are some possible use cases:
 
 * **Executor** - loaders (spinners), passing control through nested component structure.
 * **CacheExecutor** - one time requests (languages, configs, currencies), deep nested data aggregation.
-* **LadderExecutor** - live search.
-* **RepeatExecutor** - timed operations, websocket simulation and other hacks : 3.
+* **LadderExecutor** - fast live search.
+* **DebounceLoader** - auto-saving, slow live search.
+* **RepeatLoader** - timed operations, websocket simulation and other hacks : 3.
 * **InfiniteLoader** - lazy loaded list.
+
+You may have noticed that we have `Executor` classes and `Loader` classes.  
+
+**Executor**'s constructor takes in a function that returns promise, and, as a result provides better async flow control.
+```javascript
+const executor = new Executor(functionThatReturnsPromise)
+await executor.run()
+await executor.run()
+```
+
+**Loader**'s constructor requires specific arguments, different for each case. `run` function won't return Promise. Asyncronous handling is loader internal.
+```javascript
+const loader = new Loader(genericFunction)
+loader.run()
+```
 
 ## Code and examples
 
@@ -94,46 +111,43 @@ executor.run('aaaa') // This request will be run only after first one resolves.
 // So, in total you have 2 requests instead of 4.
 ``` 
 
-### DebounceExecutor
+### DebounceLoader
 
 ```javascript
 // We want to save the form if user was inactive for 3 seconds.
-import { DebounceExecutor } from 'asva-executors'
-const executor = new DebounceExecutor(saveTheForm, 3000)
+import { DebounceLoader } from 'asva-executors'
+const loader = new DebounceLoader(saveTheForm, 3000)
 
 // User starts editing the form
-executor.run()
+loader.run()
 // And does that a couple of times in quick succession.
-executor.run()
-executor.run()
+loader.run()
+loader.run()
 // Then he stops. 3 seconds pass. And only then `saveTheForm` command is called.
 ``` 
 
-DebounceExecutor has several public properties:
+DebounceLoader has several public properties:
 ```javascript
-executor.isRunning // Means command is currently executing.
-executor.isWaiting // Executor is waiting the period of inactivity to finish.
-executor.isActive // Executor is running or is waiting. 
+loader.isRunning // Means command is currently executing.
+loader.isWaiting // Executor is waiting the period of inactivity to finish.
+loader.isActive // Executor is running or is waiting. 
 ```
 
-You have to stop `RepeatExecutor` if you don't need it anymore. Similar to `setInterval` command it won't be garbage collected until then.
-
-
-### RepeatExecutor
+### RepeatLoader
 
 ```javascript
 // Being too lazy to implement websockets we decide to check notifications every ten seconds.
-import { RepeatExecutor } from 'asva-executors'
-const executor = new RepeatExecutor(checkNotificationsCall, 10000)
+import { RepeatLoader } from 'asva-executors'
+const loader = new RepeatLoader(checkNotificationsCall, 10000)
 
 // Start checking notifications
-executor.start()
+loader.start()
 
 // Stop checking notifications
-executor.stop()
+loader.stop()
 ``` 
 
-You have to stop `RepeatExecutor` if you don't need it anymore. Similar to `setInterval` command it won't be garbage collected until then.
+You have to stop `RepeatLoader` if you don't need it anymore. Similar to `setInterval` command it won't be garbage collected until then.
 
 ### InfiniteLoader
 
@@ -153,22 +167,33 @@ import { InfiniteLoader } from 'asva-executors'
 *   
 * * perStep - number of items per request (defaults to 20)
 */
-const infiniteLoader = new InfiniteLoader(
+const loader = new InfiniteLoader(
   async (pointer, perStep) =>  await loadListItems(pointer, perStep), 
   10
 )
-infiniteLoader.next() // Initial run. Let's load 10 items.
-infiniteLoader.next() // User scrolls to bottom.
-infiniteLoader.refresh() // User applies filter. List will be refreshed.
+// User opens the page.
+loader.next() // Loader begins to load first 10 items.
+// User scrolls down impatiently.
+loader.next() // This command will be ignored silently as first request is still in progress.
+// User waits for list to be downloaded.
+console.log(loader.items.length) // > 10
+// User read through first 10 items and he wants more.
+loader.next() // Loads next 10 items
+// And they're swiftly loaded.
+console.log(loader.items.length) // > 20
+// User decides to apply a filter because scrolling is hard.
+loader.refresh() // User applies filter. List will be refreshed.
+// List is refreshed with new filter.
+console.log(loader.items.length) // > 10
 
-// To get items call
-infiniteLoader.items
+// To access your items call.
+loader.items
 
-// You can perform various checks on `infiniteLoader`:
-infiniteLoader.isRunning // Loader is running
-infiniteLoader.isEmpty // We tried to load, but list is empty
-infiniteLoader.ifFull // We tried to load, and list is not empty
-infiniteLoader.isRefreshing // Is loading anew (refreshing or loading for first time).
+// You can perform various checks on `InfiniteLoader` instance:
+loader.isRunning // Loader is running
+loader.isEmpty // We tried to load, but list is empty
+loader.ifFull // We tried to load, and list is not empty
+loader.isRefreshing // Is loading anew (refreshing or loading for first time).
 ```
 
 -----------------------
@@ -188,4 +213,5 @@ Feel free to check [source code][source-code-link] or tests to get better unders
 MIT
 
 [java-executor-url]: https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Executor.html
+[debounce-article]: https://css-tricks.com/debouncing-throttling-explained-examples/
 [source-code-link]: src/modules

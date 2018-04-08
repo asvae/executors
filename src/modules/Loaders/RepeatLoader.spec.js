@@ -1,9 +1,9 @@
-import RepeatExecutor from './RepeatExecutor'
+import RepeatLoader from './RepeatLoader'
 
-describe('RepeatExecutor', () => {
+describe('RepeatLoader', () => {
   it('simple closure', (done) => {
     let count = 0
-    const repeatExecutor = new RepeatExecutor(() => count++, 100)
+    const repeatExecutor = new RepeatLoader(() => count++, 100)
     repeatExecutor.start()
     setTimeout(() => {
       repeatExecutor.stop()

@@ -1,7 +1,7 @@
 export type ExecutorCommand = (...args: any[]) => Promise<any>
 
 export default class Executor {
-  protected command: ExecutorCommand
+  protected readonly command: ExecutorCommand
 
   /**
    * Currently running commands
