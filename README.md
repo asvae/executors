@@ -182,7 +182,7 @@ loader.next() // Loads next 10 items
 // And they're swiftly loaded.
 console.log(loader.items.length) // > 20
 // User decides to apply a filter because scrolling is hard.
-loader.refresh() // User applies filter. List will be refreshed.
+loader.refresh() // Starts request to load items anew. Old items are left intact until request finishes.
 // List is refreshed with new filter.
 console.log(loader.items.length) // > 10
 
