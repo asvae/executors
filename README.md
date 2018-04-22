@@ -28,7 +28,7 @@ Available classes are:
 * **Executor** - basic executor (is extended by all other executors).
 * **CacheExecutor** - caches first result.
 * **LadderExecutor** - runs subsequent request only after previous one is finished.
-* **DebounceLoader** - provides (debounce)[debounce-article] functionality.
+* **DebounceLoader** - provides [debounce][debounce-article] functionality.
 * **RepeatLoader** - is just `setInterval` wrapped in class.
 * **InfiniteLoader** - encapsulates lazy loaded list logic.
 
