@@ -1,6 +1,6 @@
 {
     "name": "asva-executors",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Helper classes for your async flow control",
     "main": "dist/src/index.js",
     "types": "dist/src/index.d.ts",
@@ -13,6 +13,19 @@
         "test": "karma start --single-run",
         "test-dev": "karma start"
     },
+    "keywords": [
+        "executors",
+        "async",
+        "promise"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/asvae/executors.git"
+    },
+    "bugs": {
+        "url": "https://github.com/asvae/executors/issues"
+    },
+    "homepage": "https://github.com/asvae/executors#readme",
     "devDependencies": {
         "@types/jasmine": "^2.8.6",
         "@types/node": "^9.6.2",
