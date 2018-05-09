@@ -46,9 +46,10 @@ export default class Executor {
   public run (...parameters: any[]): Promise<any> {
     this.beforeRun()
     const promise = this.command(...parameters)
-    if (!(promise instanceof Promise)) {
-      throw new Error('Executor command should return promise.')
-    }
+    // NOTE This check was broken on second package import (package one < package two < executor)
+    // if (!(promise instanceof Promise)) {
+    //   throw new Error('Executor command should return promise.')
+    // }
     this.afterRun(promise)
     return promise
   }
