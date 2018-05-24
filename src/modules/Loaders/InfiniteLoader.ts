@@ -1,18 +1,18 @@
-import Executor from '../Executors/Executor'
+import LadderExecutor from '../Executors/LadderExecutor'
 
 export type PointerRequest = (pointer: number, perStep: number) => Promise<any[]>
 
 export default class InfiniteLoader {
   public items: any[] = []
 
-  protected readonly executor: Executor
+  protected readonly executor: LadderExecutor
   protected readonly perStep: number = 20 // number of items to load
   protected pointer: number = 0
   protected isFinished: boolean = false
   protected isFresh: boolean = true
 
   constructor (run: PointerRequest, perStep: number = 20) {
-    this.executor = new Executor(run)
+    this.executor = new LadderExecutor(run)
     this.perStep = perStep
   }
 
