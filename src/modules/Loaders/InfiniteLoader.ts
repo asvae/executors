@@ -4,11 +4,11 @@ export type PointerRequest = (pointer: number, perStep: number) => Promise<any[]
 
 export default class InfiniteLoader {
   public items: any[] = []
+  public isFinished: boolean = false
 
   protected readonly executor: LadderExecutor
   protected readonly perStep: number = 20 // number of items to load
   protected pointer: number = 0
-  protected isFinished: boolean = false
   protected isFresh: boolean = true
 
   constructor (run: PointerRequest, perStep: number = 20) {
@@ -53,7 +53,7 @@ export default class InfiniteLoader {
    * Loads a bunch of items
    */
   public next (): void {
-    if (this.isRunning) {
+    if (this.isRunning || this.isFinished) {
       return
     }
     this.isFresh = false
