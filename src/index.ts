@@ -4,6 +4,7 @@ import LadderExecutor from './modules/Executors/LadderExecutor'
 import DebounceLoader from './modules/Loaders/DebounceLoader'
 import RepeatLoader from './modules/Loaders/RepeatLoader'
 import InfiniteLoader from './modules/Loaders/InfiniteLoader'
+import { InfiniteLoaderFactory } from './modules/Loaders/InfiniteLoaderFactory'
 
 export {
   CacheExecutor,
@@ -12,4 +13,5 @@ export {
   DebounceLoader,
   RepeatLoader,
   InfiniteLoader,
+  InfiniteLoaderFactory,
 }
