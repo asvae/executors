@@ -2,7 +2,7 @@ import RetrierExecutor from './RetrierExecutor'
 import AsyncHelpers from '../Helpers/AsyncHelpers'
 
 describe('RetrierExecutor', () => {
-  fit('loads list', (done) => {
+  it('works in default conditions', (done) => {
     const asyncExpression = async () => {
       let valueToCheck = false
 
@@ -23,7 +23,7 @@ describe('RetrierExecutor', () => {
     asyncExpression()
   })
 
-  fit('throws when max timeout is exceeded', (done) => {
+  it('throws when max timeout is exceeded', (done) => {
     const asyncExpression = async () => {
       const retrierExecutor = new RetrierExecutor(() => false, 100, 1000)
       try {
@@ -32,6 +32,21 @@ describe('RetrierExecutor', () => {
         expect(retrierExecutor.timeElapsed).toBe(1100)
         done()
       }
+    }
+    asyncExpression()
+  })
+
+  it('waitUntil', (done) => {
+    const asyncExpression = async () => {
+      let valueToCheck = false
+
+      AsyncHelpers.sleep(500)
+        .then(() => {
+          valueToCheck = true
+        })
+
+      await RetrierExecutor.waitUntil(() => valueToCheck, 200, 2000)
+      done()
     }
     asyncExpression()
   })
