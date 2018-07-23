@@ -52,7 +52,7 @@ describe('InfiniteLoader', () => {
     asyncExpression()
   })
 
-  fit('handles multiple refreshes', (done) => {
+  it('handles multiple refreshes', (done) => {
     let counter = 0
     const pointerRequest = (pointer, perStep) => {
       return new Promise((resolve) => {
