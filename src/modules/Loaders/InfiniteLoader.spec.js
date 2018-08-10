@@ -17,6 +17,7 @@ describe('InfiniteLoader', () => {
     }
     asyncExpression()
   })
+
   it('refreshes', (done) => {
     const pointerRequest = PointerRequestFactory.getPointerRequest(100)
     const infiniteLoader = new InfiniteLoader(pointerRequest, 10)
@@ -34,6 +35,7 @@ describe('InfiniteLoader', () => {
     }
     asyncExpression()
   })
+
   it('handles multiple next', (done) => {
     const pointerRequest = PointerRequestFactory.getPointerRequest(100)
     const infiniteLoader = new InfiniteLoader(pointerRequest, 10)
