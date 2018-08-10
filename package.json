@@ -1,15 +1,16 @@
 {
     "name": "asva-executors",
-    "version": "0.1.10",
+    "version": "0.1.11",
     "description": "Helper classes for your async flow control",
     "main": "dist/src/index.js",
-    "module" :"dist/src/index.esm.js",
     "types": "dist/src/index.d.ts",
     "private": false,
     "license": "MIT",
     "author": "Yauheni Prakopchyk",
     "scripts": {
-        "build": "webpack --progress --hide-modules --config src/build/webpack-config-build.js",
+        "build": "yarn build-webpack & yarn build-rollup",
+        "build-rollup": "rollup -c",
+        "build-webpack": "webpack --progress --hide-modules --config src/build/webpack-config-build.js",
         "dev": "webpack-dev-server --inline --hot --config src/build/webpack-config-dev.js",
         "test": "karma start --single-run",
         "test-dev": "karma start"
