@@ -1,8 +1,9 @@
 {
     "name": "asva-executors",
-    "version": "0.1.12",
+    "version": "0.1.13",
     "description": "Helper classes for your async flow control",
     "main": "dist/src/index.js",
+    "module": "dist/src/index.esm.js",
     "types": "dist/src/index.d.ts",
     "private": false,
     "license": "MIT",
@@ -48,6 +49,7 @@
         "requirejs": "^2.3.5",
         "rollup-plugin-typescript": "^0.8.1",
         "ts-loader": "^4.2.0",
+        "tslib": "^1.9.3",
         "typedoc": "^0.11.1",
         "typedoc-webpack-plugin": "^1.1.4",
         "typescript": "^2.8.1",
