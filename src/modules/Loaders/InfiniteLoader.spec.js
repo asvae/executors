@@ -78,4 +78,34 @@ describe('InfiniteLoader', () => {
     }
     asyncExpression()
   })
+
+  it('isRefreshing', (done) => {
+    const pointerRequest = PointerRequestFactory.getPointerRequest(100)
+    const infiniteLoader = new InfiniteLoader(pointerRequest, 10)
+
+    const asyncExpression = async () => {
+      // expect(infiniteLoader.isRefreshing).toBe(false)
+      infiniteLoader.next()
+      expect(infiniteLoader.isRefreshing).toBe(true)
+
+      await AsyncHelpers.sleep(110)
+      expect(infiniteLoader.isRefreshing).toBe(false)
+
+      infiniteLoader.next()
+      expect(infiniteLoader.isRefreshing).toBe(false)
+
+      infiniteLoader.refresh()
+      // Previous request still running.
+      expect(infiniteLoader.isRefreshing).toBe(false)
+
+      // Refresh got its turn.
+      await AsyncHelpers.sleep(110)
+      expect(infiniteLoader.isRefreshing).toBe(true)
+
+      await AsyncHelpers.sleep(110)
+      expect(infiniteLoader.isRefreshing).toBe(false)
+      done()
+    }
+    asyncExpression()
+  })
 })

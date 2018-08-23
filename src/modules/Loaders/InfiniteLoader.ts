@@ -5,14 +5,17 @@ export type PointerRequest = (pointer: number, perStep: number) => Promise<any[]
 export default class InfiniteLoader {
   public items: any[] = []
   public isFinished: boolean = false
+  public isRefreshing: boolean = false
 
   protected readonly executor: LadderExecutor
   protected readonly perStep: number = 20 // number of items to load
   protected pointer: number = 0
+  // Means no runs were executed
   protected isFresh: boolean = true
+  // Is currently running from 0 pointer
 
   constructor (run: PointerRequest, perStep: number = 20) {
-    this.executor = new LadderExecutor(async () => await this.runRequest(run))
+    this.executor = new LadderExecutor(async (refresh = false) => await this.runRequest(run, refresh))
     this.perStep = perStep
   }
 
@@ -25,6 +28,7 @@ export default class InfiniteLoader {
 
   /**
    * We tried to load, but list is empty
+   * Is false when executor is loading or is fresh.
    */
   get isEmpty (): boolean {
     if (this.executor.isRunning) {
@@ -35,36 +39,43 @@ export default class InfiniteLoader {
 
   /**
    * We tried to load, and list is not empty
+   * Is false when executor is loading or is fresh.
    */
   get isFull (): boolean {
+    if (this.isFresh) {
+      return false
+    }
+    if (this.executor.isRunning) {
+      return false
+    }
     return !!this.items.length
-  }
-
-  /**
-   * Is loading anew. This could happen in two cases.
-   * 1) Executor is running for the first time. Meaning the list is empty.
-   * 2) Executor is refreshing. Meaning the list is not empty.
-   */
-  get isRefreshing (): boolean {
-    return this.pointer === 0 && this.isRunning
   }
 
   /**
    * Loads a bunch of items
    */
   public next (): void {
-    if (this.isRunning || this.isFinished) {
-      return
-    }
-    this.isFresh = false
-
     this.executor.run()
   }
 
-  protected async runRequest (pointerRequest: PointerRequest): Promise<void> {
+  /**
+   * Refresh the list.
+   */
+  public refresh (): void {
+    this.executor.run(true)
+  }
+
+  protected async runRequest (pointerRequest: PointerRequest, refresh = false): Promise<void> {
+    if (this.pointer === 0) {
+      refresh = true
+    }
+    if (refresh) {
+      this.pointer = 0
+      this.isFresh = true
+      this.isRefreshing = true
+      this.isFinished = false
+    }
     try {
-      // We declare it here because concurrent reset might conflict when using increment
-      const expectedPointer = this.pointer + this.perStep
       const result = await pointerRequest(this.pointer, this.perStep)
 
       if (!Array.isArray(result)) {
@@ -74,23 +85,16 @@ export default class InfiniteLoader {
       if (result.length < this.perStep) {
         this.isFinished = true
       }
-      this.pointer = expectedPointer
+
       this.applyNew(result)
+      this.pointer = this.pointer + this.perStep
+      this.isFresh = false
     } catch (exception) {
       this.isFinished = true
       throw exception
+    } finally {
+      this.isRefreshing = false
     }
-  }
-
-  /**
-   * Refresh the list.
-   * This will replace current items with new ones after loading. Not clear the list immediately.
-   */
-  public refresh (): void {
-    this.pointer = 0
-    this.isFresh = true
-    this.isFinished = false
-    this.executor.run()
   }
 
   protected applyNew (items: any[]): void {
