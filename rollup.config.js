@@ -8,6 +8,7 @@ export default {
     format: 'esm',
   },
   plugins: [
-    typescriptPlugin({ typescript }),
+    typescriptPlugin({typescript}),
   ],
+  external: ['tslib'],
 }

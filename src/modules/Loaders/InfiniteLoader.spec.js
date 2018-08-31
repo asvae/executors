@@ -43,7 +43,7 @@ describe('InfiniteLoader', () => {
     const asyncExpression = async () => {
       infiniteLoader.next() // Should trigger first request
       await AsyncHelpers.sleep(90)
-      infiniteLoader.next() // Should do nothing, first request is currently running.
+      infiniteLoader.next() // Should register second request
       await AsyncHelpers.sleep(20)
       infiniteLoader.next() // Should trigger second request
       await AsyncHelpers.sleep(110)
@@ -104,6 +104,28 @@ describe('InfiniteLoader', () => {
 
       await AsyncHelpers.sleep(110)
       expect(infiniteLoader.isRefreshing).toBe(false)
+      done()
+    }
+    asyncExpression()
+  })
+
+  it('isProvidingCorrectPointerOnConcurrentRefresh', (done) => {
+    const pointerRequest = PointerRequestFactory.getPointerRequest(100)
+    const infiniteLoader = new InfiniteLoader(pointerRequest, 10)
+
+    const asyncExpression = async () => {
+      infiniteLoader.next()
+      await AsyncHelpers.sleep(110)
+
+      infiniteLoader.refresh()
+      await AsyncHelpers.sleep(10)
+      infiniteLoader.refresh()
+      await AsyncHelpers.sleep(200)
+
+      infiniteLoader.next()
+      await AsyncHelpers.sleep(110)
+      expect(infiniteLoader.items[infiniteLoader.items.length -1]).toBe(19)
+
       done()
     }
     asyncExpression()
