@@ -1,8 +1,9 @@
 {
     "name": "asva-executors",
-    "version": "0.1.17",
+    "version": "0.1.18",
     "description": "Helper classes for your async flow control",
     "main": "dist/src/index.js",
+    "module": "dist/src/index.esm.js",
     "types": "dist/src/index.d.ts",
     "private": false,
     "license": "MIT",
