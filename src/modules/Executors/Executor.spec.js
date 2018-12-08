@@ -1,6 +1,24 @@
 import Executor from './Executor'
 
 describe('Executor', () => {
+  it('createAndRun', done => {
+    let state = 'default'
+
+    const executor = Executor.createAndRun(() => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          state = 'changed'
+          expect(state).toBe('changed')
+          resolve()
+          done()
+        }, 100)
+      })
+    })
+
+    executor.run()
+    expect(state).toBe('default')
+  })
+
   it('resolves command asynchronously', done => {
     let state = 'default'
 

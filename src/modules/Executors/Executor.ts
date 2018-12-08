@@ -32,6 +32,12 @@ export default class Executor {
     this.command = command
   }
 
+  static createAndRun (command: ExecutorCommand): Executor {
+    const executor = new Executor(command)
+    executor.run()
+    return executor
+  }
+
   /**
    * Command from this executor is currently running.
    */

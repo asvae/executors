@@ -72,6 +72,9 @@ const executor = new Executor(command)
 // Run command and process results
 executor.run('data').then(result => console.log(result)) // Outputs 'data' to console
 
+// Instantiate executor and run immediately
+const executor = Executor.createAndRun(command)
+
 // Do some checks
 executor.isRunning // Tells if executor currently runs command.
 executor.runCount  // Show the number of currently running commands. There could be more than one, yes.
