@@ -28,6 +28,7 @@ Available classes are:
 * **Executor** - basic executor (is extended by all other executors).
 * **CacheExecutor** - caches first result.
 * **LadderExecutor** - runs subsequent request only after previous one is finished.
+* **StatefulExecutor** - stores loaded result.
 * **DebounceLoader** - provides [debounce][debounce-article] functionality.
 * **RepeatLoader** - is just `setInterval` wrapped in class.
 * **InfiniteLoader** - encapsulates lazy loaded list logic.
@@ -37,6 +38,7 @@ Here are some possible use cases:
 * **Executor** - loaders (spinners), passing control through nested component structure.
 * **CacheExecutor** - one time requests (languages, configs, currencies), deep nested data aggregation.
 * **LadderExecutor** - fast live search.
+* **StatefulExecutor** - sugar for standard executor cases with single state.
 * **DebounceLoader** - auto-saving, slow live search.
 * **RepeatLoader** - timed operations, websocket simulation and other hacks : 3.
 * **InfiniteLoader** - lazy loaded list.
@@ -89,7 +91,7 @@ executor.wasLastRunFine // Last executor run happened without an error
 ```javascript
 // We intend to make an expensive ajax call from several places.
 import { CacheExecutor } from 'asva-executors'
-const executor = new Executor(ajaxExpensiveCall)
+const executor = new CacheExecutor(ajaxExpensiveCall)
 
 // Run the same executor in a number of places simultaneously or not. 
 // Command will be executed only once.
@@ -112,6 +114,18 @@ executor.run('aa') // This request won't be run
 executor.run('aaa') // This request won't be run
 executor.run('aaaa') // This request will be run only after first one resolves.
 // So, in total you have 2 requests instead of 4.
+``` 
+
+### StatefulExecutor
+
+```javascript
+// Example is simple select that manages its own state.
+import { StatefulExecutor } from 'asva-executors'
+const executor = new StatefulExecutor(command, []) // if you don't provide second argument, default state is `null`
+
+executor.state // will be initially []
+await executor.run()
+executor.state // Now becomes whatever was returned from `command`.
 ``` 
 
 ### DebounceLoader
