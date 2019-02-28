@@ -29,8 +29,9 @@ Available classes are:
 * **CacheExecutor** - caches first result.
 * **LadderExecutor** - runs subsequent request only after previous one is finished.
 * **StatefulExecutor** - stores loaded result.
+* **RetrierExecutor** - checks condition on interval.
 * **DebounceLoader** - provides [debounce][debounce-article] functionality.
-* **RepeatLoader** - is just `setInterval` wrapped in class.
+* **RepeatLoader** - `setInterval` wrapped in class.
 * **InfiniteLoader** - encapsulates lazy loaded list logic.
 
 Here are some possible use cases:
@@ -39,8 +40,9 @@ Here are some possible use cases:
 * **CacheExecutor** - one time requests (languages, configs, currencies), deep nested data aggregation.
 * **LadderExecutor** - fast live search.
 * **StatefulExecutor** - sugar for standard executor cases with single state.
+* **RetrierExecutor** - tests.
 * **DebounceLoader** - auto-saving, slow live search.
-* **RepeatLoader** - timed operations, websocket simulation and other hacks : 3.
+* **RepeatLoader** - timed operations, websocket simulation and other hacks.
 * **InfiniteLoader** - lazy loaded list.
 
 You may have noticed that we have `Executor` classes and `Loader` classes.  
@@ -127,6 +129,20 @@ executor.state // will be initially []
 await executor.run()
 executor.state // Now becomes whatever was returned from `command`.
 ``` 
+
+### RetrierExecutor
+
+```javascript
+// In test environment we want to observe data or DOM change when we don't have any event handle.
+import { RetrierExecutor } from 'asva-executors'
+// We will check observed property every 10ms for 1000ms at max.
+const retrierExecutor = new RetrierExecutor(() => property === expectedValue, 10, 1000)
+
+// `run` returns normal promise
+await retrierExecutor.run()
+``` 
+
+If 1000ms passes and condition is not yet fullfilled - promise will reject.`
 
 ### DebounceLoader
 
