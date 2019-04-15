@@ -39,6 +39,11 @@ export default class DebounceLoader {
     }, this.timeout)
   }
 
+  public reset (): void {
+    this.isWaiting = false
+    this.identityCheck = {}
+  }
+
   protected registerIdentity (): {} {
     this.identityCheck = {}
     return this.identityCheck

@@ -157,6 +157,11 @@ loader.run()
 loader.run()
 loader.run()
 // Then he stops. 3 seconds pass. And only then `saveTheForm` command is called.
+
+// User starts editing the form again.
+loader.run()
+// Then goes to another page. We want to stop execution.
+loader.reset()
 ``` 
 
 DebounceLoader has several public properties:

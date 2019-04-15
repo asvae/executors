@@ -1,6 +1,6 @@
 {
     "name": "asva-executors",
-    "version": "0.1.21",
+    "version": "0.1.22",
     "description": "Helper classes for your async flow control",
     "main": "dist/src/index.js",
     "module": "dist/src/index.esm.js",
@@ -61,5 +61,6 @@
     "engines": {
         "node": ">= 5.0.0",
         "npm": ">= 3.0.0"
-    }
+    },
+    "sideEffects": false
 }

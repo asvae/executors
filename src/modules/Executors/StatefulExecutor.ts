@@ -27,6 +27,4 @@ export class StatefulExecutor extends Executor {
     })
     return promise
   }
-
-
 }
