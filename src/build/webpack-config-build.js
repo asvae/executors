@@ -25,6 +25,7 @@ module.exports = function () {
       filename: 'src/index.js',
       publicPath: '/',
       libraryTarget: 'umd',
+      globalObject: 'Function("return this")()', // allows it to work in different environments.
     },
     module: {
       rules: [
