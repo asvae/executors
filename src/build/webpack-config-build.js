@@ -1,11 +1,10 @@
 const config = require('./config.js')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
-const TypedocWebpackPlugin = require('typedoc-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = function () {
   return {
     mode: 'production',
-    devtool: 'devtool',
+    devtool: 'source-map',
     entry: {
       app: config.FOLDERS.SRC + '/index.ts',
     },
@@ -37,10 +36,7 @@ module.exports = function () {
       ],
     },
     plugins: [
-      new CleanWebpackPlugin(['dist'], { root: config.FOLDERS.ROOT }),
-      new TypedocWebpackPlugin({
-        target: 'es2017',
-      }),
+      new CleanWebpackPlugin(),
     ],
   }
 }
