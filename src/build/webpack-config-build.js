@@ -14,6 +14,9 @@ module.exports = function () {
       reasons: true,
       errorDetails: true,
     },
+    externals: {
+      tslib: 'tslib',
+    },
     resolve: {
       extensions: ['.ts'],
     },
