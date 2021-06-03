@@ -4,7 +4,8 @@ const TypedocWebpackPlugin = require('typedoc-webpack-plugin')
 
 module.exports = function () {
   return {
-    mode: 'development',
+    mode: 'production',
+    devtool: 'devtool',
     entry: {
       app: config.FOLDERS.SRC + '/index.ts',
     },
