@@ -1,5 +1,6 @@
 import typescriptPlugin from 'rollup-plugin-typescript'
 import typescript from 'typescript'
+import { uglify } from "rollup-plugin-uglify";
 
 export default {
   input: './src/index.ts',
@@ -9,6 +10,7 @@ export default {
   },
   plugins: [
     typescriptPlugin({typescript}),
+    uglify()
   ],
   external: ['tslib'],
 }
