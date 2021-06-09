@@ -9,7 +9,7 @@
     "license": "MIT",
     "author": "Yauheni Prakopchyk",
     "scripts": {
-        "build": "yarn build-webpack & yarn build-rollup",
+        "build": "yarn build-webpack && yarn build-rollup",
         "build-webpack": "webpack --progress --config src/build/webpack-config-build.js",
         "build-rollup": "rollup -c",
         "test": "karma start --single-run",
@@ -48,6 +48,7 @@
         "karma-webpack": "^5.0.0",
         "requirejs": "^2.3.5",
         "rollup-plugin-typescript": "^1.0.1",
+        "rollup-plugin-uglify": "^6.0.4",
         "ts-loader": "^9.2.2",
         "typedoc": "^0.20.36",
         "typescript": "^4.3.2",
